@@ -9,11 +9,19 @@ import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.glass.app.Card;
 import com.google.android.glass.view.WindowUtils;
+import com.google.android.glass.widget.CardScrollAdapter;
+
+import java.util.List;
 
 /**
  * Created by Carl on 2014-08-28.
@@ -52,6 +60,8 @@ public class PhoneCall extends Activity{
         Card card = new Card(getApplicationContext());
 
         card.setText(caller);
+        ((TextView)findViewById(R.id.caller)).setText(caller);
+        ((TextView)findViewById(R.id.number)).setText(number);
         card.setFootnote(number);
         setContentView(card.getView());
         final Handler mHandler = new Handler();

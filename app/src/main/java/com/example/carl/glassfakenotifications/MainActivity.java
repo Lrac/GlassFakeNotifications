@@ -45,6 +45,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,6 +71,9 @@ public class MainActivity extends Activity {
     private CardScrollView mCardScroller;
 
     private CardScrollAdapter mCardScrollerAdapter;
+
+    private CustomCardScrollAdapter mCustomCardScrollerAdapter;
+    List<RelativeLayout> mLayoutList = new ArrayList<RelativeLayout>();
 
     private boolean homeSelected = false;
 
@@ -99,6 +103,10 @@ public class MainActivity extends Activity {
         if(voiceCommand) {
             window.requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         }
+
+        mLayoutList.add((RelativeLayout)findViewById(R.id.textcardlayout));
+        mLayoutList.add((RelativeLayout)findViewById(R.id.layout));
+        mCustomCardScrollerAdapter = new CustomCardScrollAdapter(mLayoutList);
 
         mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
         mAlertReceived = mSoundPool.load(getApplicationContext(), R.raw.sound_notification, 1);
@@ -135,7 +143,7 @@ public class MainActivity extends Activity {
                 return cardList.indexOf(timeCard);
             }
         };
-        mCardScroller.setAdapter(mCardScrollerAdapter);
+        mCardScroller.setAdapter(mCustomCardScrollerAdapter);
 
         // Handle the TAP event.
         mCardScroller.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -212,6 +220,8 @@ public class MainActivity extends Activity {
         Card card = new Card(this);
         cardList.add(1, card);
         card.setText(message);
+        ((TextView)findViewById(R.id.message)).setText(message);
+        ((TextView)findViewById(R.id.sender)).setText(sender);
         card.setFootnote(sender);
         mCardScrollerAdapter.notifyDataSetChanged();
         mCardScroller.setSelection(cardList.indexOf(card));
@@ -404,6 +414,39 @@ public class MainActivity extends Activity {
         getApplicationContext().sendBroadcast(logMessage);
     }
 
+    private class CustomCardScrollAdapter extends CardScrollAdapter {
 
+        private List<RelativeLayout> mViews;
 
+        public CustomCardScrollAdapter(List<RelativeLayout> views) {
+            mViews = views;
+        }
+
+        public Object getItem(int position) {
+            return cardList.get(position);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return mViews.get(position);
+        }
+
+        @Override
+        public int getPosition(Object item) {
+            if (cardList.contains(item)) {
+                return cardList.indexOf(item);
+            }
+            return AdapterView.INVALID_POSITION;
+        }
+
+        @Override
+        public int getCount() {
+            return cardList.size();
+        }
+
+        @Override
+        public int getHomePosition() {
+            return cardList.indexOf(timeCard);
+        }
+    }
 }

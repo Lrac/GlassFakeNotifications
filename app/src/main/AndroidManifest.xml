@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.carl.glassfakenotifications" >
+
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="com.google.android.glass.permission.DEVELOPMENT"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_glass_logo"
+        android:label="@string/app_name">
+        <activity
+            android:name=".BluetoothClient"
+            android:label="@string/app_name"
+            android:immersive="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.glass.action.VOICE_TRIGGER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="com.google.android.glass.VoiceTrigger"
+                android:resource="@xml/voice_trigger" />
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:icon="@drawable/ic_glass_logo"
+            android:label="@string/title_activity_main"
+            android:immersive="true">
+
+        </activity>
+        <activity
+            android:name=".PhoneCall"
+            android:icon="@drawable/ic_glass_logo"
+            android:label="PhoneCall"
+            android:immersive="true">
+
+            </activity>
+        <activity
+            android:name=".Settings"
+            android:icon="@drawable/ic_glass_logo"
+            android:label="Settings"
+            android:immersive="true">
+
+            </activity>
+    </application>
+
+</manifest>

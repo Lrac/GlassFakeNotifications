@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/accept"
+        android:title="Accept">
+
+    </item>
+
+    <item
+        android:id="@+id/decline"
+        android:title="Decline">
+
+    </item>
+    <item
+        android:id="@+id/reply_with_message"
+        android:title="Reply with message">
+        <menu>
+            <item
+                android:id="@+id/busy"
+                android:title="Busy">
+
+            </item>
+            <item
+                android:id="@+id/call_you_back"
+                android:title="Will call back">
+
+            </item>
+            <item
+                android:id="@+id/lol"
+                android:title="Lol">
+
+            </item>
+        </menu>
+
+
+    </item>
+
+
+</menu>

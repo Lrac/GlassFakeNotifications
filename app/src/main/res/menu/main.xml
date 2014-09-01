@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Use the constants defined in the ContextualMenus.Command enum-->
+    <item
+        android:id="@+id/exit"
+        android:title="Exit">
+
+    </item>
+
+</menu>

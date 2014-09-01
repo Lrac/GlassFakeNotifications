@@ -104,8 +104,6 @@ public class MainActivity extends Activity {
             window.requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         }
 
-        mLayoutList.add((RelativeLayout)findViewById(R.id.textcardlayout));
-        mLayoutList.add((RelativeLayout)findViewById(R.id.layout));
         mCustomCardScrollerAdapter = new CustomCardScrollAdapter(mLayoutList);
 
         mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
@@ -217,6 +215,7 @@ public class MainActivity extends Activity {
      * Builds a Glass styled "Hello World!" view using the {@link Card} class.
      */
     private View buildView(String sender, String message) {
+        mLayoutList.add((RelativeLayout)findViewById(R.id.textcardlayout));
         Card card = new Card(this);
         cardList.add(1, card);
         card.setText(message);

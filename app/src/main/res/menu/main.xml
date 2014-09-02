@@ -5,5 +5,26 @@
         android:title="Exit">
 
     </item>
+    <item
+        android:id="@+id/reply"
+        android:title="Reply">
+        <menu>
+            <item
+                android:id="@+id/busy"
+                android:title="Busy">
+
+            </item>
+            <item
+                android:id="@+id/call_you_back"
+                android:title="Call you back">
+
+            </item>
+            <item
+                android:id="@+id/lol"
+                android:title="Lol">
+
+            </item>
+        </menu>
+    </item>
 
 </menu>

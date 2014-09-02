@@ -56,14 +56,14 @@ public class PhoneCall extends Activity{
         if(voiceCommand) {
             window.requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         }
-
+        setContentView(R.layout.call_card);
         Card card = new Card(getApplicationContext());
 
         card.setText(caller);
         ((TextView)findViewById(R.id.caller)).setText(caller);
         ((TextView)findViewById(R.id.number)).setText(number);
         card.setFootnote(number);
-        setContentView((RelativeLayout)findViewById(R.id.layout));
+
         final Handler mHandler = new Handler();
         final Runnable mDelayedRingtone = new Runnable() {
             int counter = 0;

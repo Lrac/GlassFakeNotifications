@@ -196,6 +196,8 @@ public class MainActivity extends Activity {
         private String currentTime;
 
         public TimeCard(){
+            RelativeLayout rLayout = (RelativeLayout)findViewById(R.id.timecardlayout);
+            mLayoutList.add(rLayout);
             homeCard = new Card(getApplicationContext());
             cardList.add(0,homeCard);
             currentTime = timeFormat.format(new Date());
@@ -433,6 +435,7 @@ public class MainActivity extends Activity {
             viewHolder.sender.setText(card.getFootnote());
             viewHolder.message.setText(card.getText());
             viewHolder.date.setText(timeFormat.format(new Date()));
+            viewHolder.time.setText(cardList.get(0).getText());
 
             return v;
         }
@@ -441,11 +444,13 @@ public class MainActivity extends Activity {
             public TextView sender;
             public TextView message;
             public TextView date;
+            public TextView time;
 
             public CompleteListViewHolder(View base) {
                 sender = (TextView) base.findViewById(R.id.sender);
                 message = (TextView) base.findViewById(R.id.message);
                 date = (TextView) base.findViewById(R.id.timestamp);
+                time = (TextView) base.findViewById(R.id.time);
             }
         }
 

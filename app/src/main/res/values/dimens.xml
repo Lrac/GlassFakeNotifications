@@ -6,7 +6,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <!-- The recommended margin for the top, left, and right edges of a card. -->
-    <dimen name="glass_card_margin">40px</dimen>
+    <dimen name="glass_card_margin">0px</dimen>
 
     <!-- The recommended margin between the bottom of the card and the footer. This is
              an adjusted value so that the baseline of the text in the footer sits 40px

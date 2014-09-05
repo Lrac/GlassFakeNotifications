@@ -13,11 +13,11 @@
         >
 
         <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="360px"
-            android:scaleType="centerCrop"
-            android:src="@drawable/profilepicture"
-            android:layout_alignParentTop="true"/>
+        android:layout_width="fill_parent"
+        android:layout_height="360px"
+        android:scaleType="centerCrop"
+        android:src="@drawable/profilepicture"
+        android:layout_alignParentTop="true"/>
 
     </RelativeLayout>
 
@@ -35,7 +35,8 @@
 
         <TextView
             android:id="@+id/message"
-            android:textSize="44px"
+            android:textSize="50px"
+            android:layout_marginLeft="30px"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
 
@@ -44,7 +45,7 @@
             android:layout_width="fill_parent"
             android:textSize="48px"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60px"
+            android:layout_marginLeft="40px"
             android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>

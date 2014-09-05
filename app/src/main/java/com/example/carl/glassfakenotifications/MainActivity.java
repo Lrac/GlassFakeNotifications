@@ -48,15 +48,15 @@ import android.view.ViewGroup;
 public class MainActivity extends Activity {
 
     List<Card> cardList = new ArrayList<Card>();
+    
+    List<TextMessage> textList = new ArrayList<TextMessage>();
 
 
     /** {@link CardScrollView} to use as the main content view. */
     private CardScrollView mCardScroller;
 
-    private CardScrollAdapter mCardScrollerAdapter;
 
     private CustomCardScrollAdapter mCustomCardScrollerAdapter;
-    List<RelativeLayout> mLayoutList = new ArrayList<RelativeLayout>();
 
     private boolean homeSelected;
 
@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
     private int mAlertReceived;
 
     private TimeCard timeCard;
-    private Card homeCard;
+    private TextMessage homeScreen;
 
     private GestureDetector mGestureDetector;
 
@@ -89,7 +89,7 @@ public class MainActivity extends Activity {
             window.requestFeature(WindowUtils.FEATURE_VOICE_COMMANDS);
         }
 
-        mCustomCardScrollerAdapter = new CustomCardScrollAdapter(this, mLayoutList);
+        mCustomCardScrollerAdapter = new CustomCardScrollAdapter(this);
 
         mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
         mAlertReceived = mSoundPool.load(getApplicationContext(), R.raw.sound_notification, 1);
@@ -104,11 +104,9 @@ public class MainActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Plays disallowed sound to indicate that TAP actions are not supported.
-                if(position == mCardScrollerAdapter.getHomePosition()){
-                    System.out.println("Selected home screen:" + position + " " + mCardScrollerAdapter.getHomePosition());
+                if(position == mCustomCardScrollerAdapter.getHomePosition()){
                     homeSelected = true;
                 } else{
-                    System.out.println("Did not select home screen:" + position + " " + mCardScrollerAdapter.getHomePosition());
                     homeSelected = false;
                 }
                 openOptionsMenu();
@@ -117,8 +115,8 @@ public class MainActivity extends Activity {
 
         mCardScroller.setHorizontalScrollBarEnabled(true);
 
-//        timeCard = new TimeCard();
-//        timeCard.start();
+        timeCard = new TimeCard();
+        timeCard.start();
         buildView("Carl","hello");
         buildView("Carl", "how's it going");
         buildView("Carl", "what's up?");
@@ -175,17 +173,11 @@ public class MainActivity extends Activity {
      * Builds a Glass styled "Hello World!" view using the {@link Card} class.
      */
     private void buildView(String sender, String message) {
-        RelativeLayout rLayout = (RelativeLayout)findViewById(R.id.textcardlayout);
-        mLayoutList.add(rLayout);
-        Card card = new Card(this);
-        cardList.add(card);
-        card.setText(message);
-//        ((TextView)findViewById(R.id.message)).setText(message);
-//        ((TextView)findViewById(R.id.sender)).setText(sender);
-        card.setFootnote(sender);
+        TextMessage textMessage = new TextMessage(sender, message);
+        textList.add(1, textMessage);
         mCustomCardScrollerAdapter.notifyDataSetChanged();
-        mCardScroller.setSelection(mLayoutList.indexOf(rLayout));
-        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        mCardScroller.setSelection(textList.indexOf(textMessage));
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         playSound(mAlertReceived);
         broadcastLog("displaying new text from: " + sender);
     }
@@ -196,24 +188,21 @@ public class MainActivity extends Activity {
         private String currentTime;
 
         public TimeCard(){
-            RelativeLayout rLayout = (RelativeLayout)findViewById(R.id.timecardlayout);
-            mLayoutList.add(rLayout);
-            homeCard = new Card(getApplicationContext());
-            cardList.add(0,homeCard);
             currentTime = timeFormat.format(new Date());
-            homeCard.setText(currentTime);
+            homeScreen = new TextMessage("", currentTime);
+            textList.add(0, homeScreen);
         }
 
         public void run(){
             while(true){
                 String newTime = timeFormat.format(new Date());
                 if (!newTime.contentEquals(currentTime)){
-                    homeCard.setText(newTime);
+                    homeScreen.setMessage(newTime);
                     currentTime = newTime;
                     MainActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mCardScrollerAdapter.notifyDataSetChanged();
+                            mCustomCardScrollerAdapter.notifyDataSetChanged();
                         }
                     });
 
@@ -399,44 +388,41 @@ public class MainActivity extends Activity {
 
     private class CustomCardScrollAdapter extends CardScrollAdapter {
         private Activity mContext;
-        private List<Card> mList;
-        private LayoutInflater mLayoutInflater = null;
-        private String[] messages;
-        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm");
 
-        private List<RelativeLayout> mViews;
-
-        public CustomCardScrollAdapter(Activity context, List<RelativeLayout> views) {
+        public CustomCardScrollAdapter(Activity context) {
             mContext = context;
-            mLayoutInflater = (LayoutInflater) mContext
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mViews = views;
         }
 
         public Object getItem(int position) {
-            return mViews.get(position);
+            return cardList.get(position);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View v = convertView;
             CompleteListViewHolder viewHolder;
+            TextMessage text = textList.get(position);
             if(convertView == null){
                 LayoutInflater li = (LayoutInflater) mContext
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = li.inflate(R.layout.text_card, null);
+                if (position != getHomePosition()) {
+                    v = li.inflate(R.layout.text_card, null);
+                } else{
+                    v = li.inflate(R.layout.time_card, null);
+                }
                 viewHolder = new CompleteListViewHolder(v);
                 v.setTag(viewHolder);
             } else{
                 viewHolder = (CompleteListViewHolder) v.getTag();
             }
-            Card card = cardList.get(position);
 
-            viewHolder.sender.setText(card.getFootnote());
-            viewHolder.message.setText(card.getText());
-            viewHolder.date.setText(timeFormat.format(new Date()));
-            viewHolder.time.setText(cardList.get(0).getText());
-
+            if(position != getHomePosition()) {
+                viewHolder.sender.setText(text.getSender());
+                viewHolder.message.setText(text.getMessage());
+                viewHolder.date.setText(text.getTimestamp());
+            }else{
+                viewHolder.time.setText(homeScreen.getMessage());
+            }
             return v;
         }
 
@@ -456,20 +442,20 @@ public class MainActivity extends Activity {
 
         @Override
         public int getPosition(Object item) {
-            if (mLayoutList.contains(item)) {
-                return mLayoutList.indexOf(item);
+            if (textList.contains(item)) {
+                return textList.indexOf(item);
             }
             return AdapterView.INVALID_POSITION;
         }
 
         @Override
         public int getCount() {
-            return mLayoutList.size();
+            return textList.size();
         }
 
         @Override
         public int getHomePosition() {
-            return 0;
+            return textList.indexOf(homeScreen);
         }
     }
 }

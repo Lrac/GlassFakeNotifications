@@ -21,7 +21,7 @@
         <TextView
             android:id="@+id/sender"
             android:layout_width="fill_parent"
-            android:textSize="24px"
+            android:textSize="48px"
             android:layout_height="180px"
             android:layout_marginLeft="60px"
             android:layout_alignParentBottom="true"/>
@@ -42,7 +42,7 @@
 
         <TextView
             android:id="@+id/message"
-            android:textSize="22px"
+            android:textSize="44px"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent" />
 

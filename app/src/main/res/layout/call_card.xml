@@ -21,14 +21,14 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="Incoming Call"
-            android:textSize="24px"
+            android:textSize="48px"
             android:layout_marginTop="30px"/>
 
         <TextView
             android:id="@+id/caller"
             android:textAlignment="center"
             android:layout_centerHorizontal="true"
-            android:textSize="30px"
+            android:textSize="60px"
             android:gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
